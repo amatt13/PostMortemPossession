@@ -17,7 +17,7 @@ The mod has 4 options that can be configered in a json file.
 How to control/possess a friendly NPC:
 1. Get knocked out :p
 2. Follow a friendly soldier with the camera
-   1. You can do this by getting close to a solder and then left clicking
+   1. You can do this by getting close to a soldier and then left clicking
 3. Hit the hotkey (default O)
 
 You can repeat this process every time the character is knocked out or killed.
