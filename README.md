@@ -6,8 +6,8 @@ This mod was inspired by [Control Your Allies After Death](https://www.nexusmods
 
 The mod has 4 options that can be configered in a json file.
 1. allowControlAllies (bool-default true) : if the player should be able to control ally soldiers
-  * true: Player can control ally and party soldiers
-  * false: Player can only control party soldiers
+   1. true: Player can control ally and party soldiers
+   2. false: Player can only control party soldiers
 2. muteExceptions (bool-default true) : if exceptions should be posted to the ingame log
 3. verbose (bool-default true) : if various status messages should be posted to the ingame log
 4. hotkey (string-default "O") : the key that triggers the "Possession"
