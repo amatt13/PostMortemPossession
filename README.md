@@ -21,3 +21,8 @@ How to control/possess a friendly NPC:
 3. Hit the hotkey (default O)
 
 You can repeat this process every time the character is knocked out or killed.
+
+## Installation
+You can either compile the project yourself or go to TODO to download the module.
+To compile the source youself, follow [this guide](https://docs.bannerlordmodding.com/_tutorials/basic-csharp-mod.html#introduction) and replace SubModule.xml and the MySubModule.cs with files in this repo (xml file with the same name and "PostMortemPossession.cs").
+The nuget library Newtonsoft.Json is also used and will have to be installed. The Taleworlds and MountAndBlade references (.dll's) can be found here: ..Mount & Blade II Bannerlord\\bin\\Win64_Shipping_Client
