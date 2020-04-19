@@ -1,2 +1,2 @@
 # PostMortemPossession
-Mount a&amp; Blade II - mod
+Mount &amp; Blade II - mod
