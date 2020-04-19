@@ -11,4 +11,13 @@ The mod has 4 options that can be configered in a json file.
 2. muteExceptions (bool-default true) : if exceptions should be posted to the ingame log
 3. verbose (bool-default true) : if various status messages should be posted to the ingame log
 4. hotkey (string-default "O") : the key that triggers the "Possession"
-  * almost all keys can be used
+   1. almost all keys can be used
+
+## How to
+How to control/possess a friendly NPC:
+1. Get knocked out :p
+2. Follow a friendly soldier with the camera
+   1. You can do this by getting close to a solder and then left clicking
+3. Hit the hotkey (default O)
+
+You can repeat this process every time the character is knocked out or killed.
