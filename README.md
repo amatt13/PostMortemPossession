@@ -32,4 +32,4 @@ Bandit hideouts are fucked. You won't be able to complete them if you take contr
 
 You can't select the "retreat" option on the scoreboard if you chose to control an NPC, unless you die again.
 
-Ypu won't be able to issue orders to your troops. I ahve purposfully not tried to implement this as I won't use that feature. You are welcome to create a pull request if you want such a feature (or some other feature) to be included.
+You won't be able to issue orders to your troops. I ahve purposfully not tried to implement this as I won't use that feature. You are welcome to create a pull request if you want such a feature (or some other feature) to be included.
