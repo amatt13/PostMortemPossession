@@ -24,6 +24,8 @@ You can repeat this process every time the character is knocked out or killed.
 
 ![./graphic/controlCav.png](./graphic/controlCav.png)
 
+![./graphic/controlCav.png](./graphic/control2.png)
+
 ## Installation
 You can either compile the project yourself or go to TODO to download the module.
 To compile the source youself, follow [this guide](https://docs.bannerlordmodding.com/_tutorials/basic-csharp-mod.html#introduction) and replace SubModule.xml and the MySubModule.cs with files in this repo (xml file with the same name and "PostMortemPossession.cs").
