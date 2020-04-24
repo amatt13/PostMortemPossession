@@ -21,8 +21,7 @@ namespace PostMortemPossession
 
         [JsonProperty("muteExceptions")]
         private bool _muteExceptions { get; set; }
-
-
+        
         [JsonProperty("verbose")]
         private bool _verbose { get; set; }
 
@@ -35,6 +34,7 @@ namespace PostMortemPossession
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
+
             var optionsFile = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly()?.Location) + @"\PostMortemPossession_options.json";
             if (File.Exists(optionsFile))
             {
@@ -49,23 +49,23 @@ namespace PostMortemPossession
                     if (!String.IsNullOrEmpty(hotkeyString))
                     {
                         if (Enum.TryParse(hotkeyString, out InputKey tempKey))
-                           this._hotkey = tempKey;
+                            this._hotkey = tempKey;
                         else
                             this._hotkey = InputKey.O;
                     }
+                    PrintInformation($"Succesfully loaded options from { optionsFile }");
                 }
                 catch (Exception e)
                 {
                     InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: unable to read content of options file: '{ e.Message }'", new Color(100, 0, 0)));
                 }
-
             }
             else
             {
                 InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: Unable to open (or find) options file: { optionsFile }", new Color(100, 0, 0)));
             }
         }
-        
+
         public override void OnMissionBehaviourInitialize(Mission pMission)
         {
             base.OnMissionBehaviourInitialize(pMission);
@@ -113,12 +113,12 @@ namespace PostMortemPossession
                                 if (_allowControlAllies)
                                     TakeControlOfFriendlyAgent(lastFollowedAgent);
                                 else
-                                    PrintInformation($"PostMortemPossession: You can't take control of ally '{ lastFollowedAgent.Name }'");
+                                    PrintInformation($"You can't take control of ally '{ lastFollowedAgent.Name }'");
                             }
                             else if (lastFollowedAgent.Team.IsEnemyOf(_playerTeam))
                             {
                                 // inform player that they can't take control of enemy soldiers
-                                PrintInformation($"PostMortemPossession: You can't take control of enemy '{ lastFollowedAgent.Name }'");
+                                PrintInformation($"You can't take control of enemy '{ lastFollowedAgent.Name }'");
                             }
                         }
                     }
@@ -134,7 +134,7 @@ namespace PostMortemPossession
         {
             if (pAgent != null)
             {
-                PrintInformation($"PostMortemPossession: You are now controlling '{ pAgent.Name }'");
+                PrintInformation($"You are now controlling '{ pAgent.Name }'");
                 pAgent.Controller = Agent.ControllerType.Player;
                 this._player = pAgent;
                 var battleObserverMissionLogic = _mission.GetMissionBehaviour<BattleObserverMissionLogic>();
@@ -148,13 +148,13 @@ namespace PostMortemPossession
         protected void PrintInformation(string pMessage)
         {
             if (_verbose && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage(pMessage, new Color(0, 0, 100)));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", new Color(0, 0, 100)));
         }
 
         protected void PrintError(string pMessage)
         {
             if (!_muteExceptions && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage(pMessage, new Color(100, 0, 0)));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", new Color(100, 0, 0)));
         }
 
         #endregion
