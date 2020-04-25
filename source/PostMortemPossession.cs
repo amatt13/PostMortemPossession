@@ -16,16 +16,12 @@ namespace PostMortemPossession
 {
     public class PostMortemPossession : MBSubModuleBase
     {
-        [JsonProperty("allowControlAllies")]
-        private bool _allowControlAllies { get; set; }
-
-        [JsonProperty("muteExceptions")]
+        private bool _allowControlAllies { get; set; }   
         private bool _muteExceptions { get; set; }
-        
-        [JsonProperty("verbose")]
         private bool _verbose { get; set; }
-
         private InputKey _hotkey { get; set; }
+        private Color? _messageColor { get; set; }
+        private Color? _errorColor { get; set; }
 
         private Agent _player { get; set; }
         private Team _playerTeam { get; set; }
@@ -53,16 +49,27 @@ namespace PostMortemPossession
                         else
                             this._hotkey = InputKey.O;
                     }
-                    PrintInformation($"Succesfully loaded options from { optionsFile }");
+
+                    var messageColorArray = jobject.Property("messageColor").Value.ToObject<int[]>();
+                    if (messageColorArray.Length == 3 && messageColorArray.All(v => v >= 0 && v <= 255))
+                        _messageColor = new Color(messageColorArray[0], messageColorArray[1], messageColorArray[2]);
+                    else
+                        PrintError("Could not read 'messageColor'. Invalid format or values. Must follow this pattern '[R, G, B]' where R, G, & B are values 0 trough 255");
+
+                    var errorColorArray = jobject.Property("errorColor").Value.ToObject<int[]>();
+                    if (errorColorArray.Length == 3 && errorColorArray.All(v => v >= 0 && v <= 255))
+                        _errorColor = new Color(errorColorArray[0], errorColorArray[1], errorColorArray[2]);
+                    else
+                        PrintError("Could not read 'errorColor'. Invalid format or values. Must follow this pattern '[R, G, B]' where R, G, & B are values 0 trough 255");
                 }
                 catch (Exception e)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: unable to read content of options file: '{ e.Message }'", new Color(100, 0, 0)));
+                    PrintError($"Unable to read content of options file: '{ e.Message }'");
                 }
             }
             else
             {
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: Unable to open (or find) options file: { optionsFile }", new Color(100, 0, 0)));
+                PrintError($"PostMortemPossession: Unable to open (or find) options file: { optionsFile }");
             }
         }
 
@@ -147,14 +154,16 @@ namespace PostMortemPossession
 
         protected void PrintInformation(string pMessage)
         {
+            var color = _messageColor != null ? _messageColor.Value : new Color(128, 128, 128);
             if (_verbose && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", new Color(0, 0, 100)));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", color));
         }
 
         protected void PrintError(string pMessage)
         {
+            var color = _errorColor != null ? _errorColor.Value : new Color(128, 0, 0);
             if (!_muteExceptions && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", new Color(100, 0, 0)));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", color));
         }
 
         #endregion
