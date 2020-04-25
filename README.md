@@ -12,6 +12,8 @@ The mod has 4 options that can be configured in a json file.
 3. verbose (bool-default true) : if various status messages should be posted to the ingame log
 4. hotkey (string-default "O") : the key that triggers the "Possession"
    1. almost all keys can be used
+5. messageColor (list-deafult "[128, 128, 128]"): the color of the status messages
+6. errorColor (list-default "[128, 0, 0]"): the color of the error messages
 
 ## How to
 How to control/possess a friendly NPC:
