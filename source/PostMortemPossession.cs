@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-using SandBox.GauntletUI.Missions;
-using TaleWorlds.Core;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.InputSystem;
-using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
-using TaleWorlds.MountAndBlade.GauntletUI;
-using TaleWorlds.Library;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.Core;
+using TaleWorlds.InputSystem;
+using TaleWorlds.MountAndBlade.ViewModelCollection.HUD;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade.ViewModelCollection;
+using TaleWorlds.MountAndBlade.View.Missions;
+using SandBox.GauntletUI.Missions;
+using System.Collections.Generic;
 
 namespace PostMortemPossession
 {
@@ -97,17 +97,11 @@ namespace PostMortemPossession
                 // the currnet player character is dead and the input key (default "O") is pressed
                 else if (Input.IsKeyPressed(_hotkey) && _player.Health <= 0.0 && _playerTeam != null)
                 {
-                    // normal mission
-                    var missionBehaviour = _mission?.MissionBehaviours.OfType<MissionView>().FirstOrDefault(mv => mv is MissionSpectatorControl);
-
-                    // tournament
-                    if (missionBehaviour == null)
-                        missionBehaviour = _mission.MissionBehaviours.OfType<MissionView>().FirstOrDefault(mb => mb is MissionGauntletTournamentView);
-
-                    if (missionBehaviour != null && missionBehaviour?.MissionScreen != null)
+                    MissionView missionView = (MissionView)_mission?.MissionBehaviours.Where(mb => mb is MissionView && (mb as MissionView).MissionScreen?.LastFollowedAgent != null).FirstOrDefault();
+                    if (missionView != null)
                     {
-                        var lastFollowedAgent = missionBehaviour?.MissionScreen?.LastFollowedAgent;
-                        if (lastFollowedAgent != null && lastFollowedAgent.Health > 0.0f)
+                        var lastFollowedAgent = missionView.MissionScreen.LastFollowedAgent;
+                        if (lastFollowedAgent.Health > 0.0f && lastFollowedAgent.Team != null)
                         {
                             if (lastFollowedAgent.Team.IsPlayerTeam)
                             {
