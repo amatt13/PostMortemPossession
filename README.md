@@ -8,6 +8,7 @@ The mod has some options that can be configured in a json file.
 1. allowControlAllies (bool-default true) : if the player should be able to control ally soldiers
    1. true: Player can control ally and party soldiers
    2. false: Player can only control party soldiers
+2. *NEW* allowControlFormations (bool-default true) : if the player should be able to give orders after they have taken control of another soldier
 2. muteExceptions (bool-default true) : if exceptions should be posted to the ingame log
 3. verbose (bool-default true) : if various status messages should be posted to the ingame log
 4. hotkey (string-default "O") : the key that makes you take control of the soldier the camera is currently following
@@ -49,5 +50,3 @@ You can either compile the project yourself or go to [NEXUS MODS](https://www.ne
 Bandit hideouts are fucked. You won't be able to complete them if you take control of another character.
 
 You can't select the "retreat" option on the scoreboard if you chose to control an NPC, unless you die again.
-
-You won't be able to issue orders to your troops. I have purposfully not tried to implement this as I won't use that feature. You are welcome to create a pull request if you want such a feature (or some other feature) to be included.
