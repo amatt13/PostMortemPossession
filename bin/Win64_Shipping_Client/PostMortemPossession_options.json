@@ -1,0 +1,29 @@
+{
+  // general options
+  "allowControlAllies": true,  // allow control of allied parties' soldiers
+  "allowControlFormations": true,  // allows the player to give orders after they control an ally (they will have access to the same formations as the player)
+  "hotKey": "O",  // the button that will allow you to  take control of a soldier
+  
+  // message options
+  "muteExceptions": true,  // do not print exception messages
+  "verbose": true,  // print status messages such as "you are now controlling X "
+  "messageColor": [128, 128, 128],  // Red, Green, Blue (see https://www.rapidtables.com/web/color/RGB_Color.html for help)
+  "errorColor": [128, 0, 0],
+
+  // Auto selct options
+  "autoSelectPriorityHotKey": "U",  // the button to automatically find the next eligible soldier (based on autoSelectPriority and allowControlAllies)
+  "autoSelectPriority": [4,  // party companions
+  						 1,  // infantry 
+  						 2,  // ranged
+  						 3,  // cavalry
+  						 3,  // horse archer
+  						 2,  // skirmisher
+  						 1,  // heavy infantry
+  						 3,  // light cavalry
+  						 3], // heavy cavalry
+  "autoSelectRandomWithinPriority": true,  // groups with equal priority are selected at random (values must be between 0 and 2147483647)
+}
+
+// Accepted values for a hotkey is: Escape, D1, D2, D3, D4, D5, D6, D7, D8, D9, D0, Minus, Equals, BackSpace, Tab, Q, W, E, R, T, Y, U, I, O, P, OpenBraces, CloseBraces, Enter, LeftControl, A, S, D, F, G, H, J, K, L, SemiColon, Apostrophe, Tilde, LeftShift, BackSlash, Z, X, C, V, B, N, M, Comma, Period, Slash, RightShift, NumpadMultiply, LeftAlt, Space, CapsLock, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, Numpad7, Numpad8, Numpad9, NumpadMinus, Numpad4, Numpad5, Numpad6, NumpadPlus, Numpad1, Numpad2, Numpad3, Numpad0, NumpadPeriod, Extended, F11, F12, NumpadEnter, RightControl, NumpadSlash, RightAlt, NumLock, Home, Up, PageUp, Left, Right, End, Down, PageDown, Insert, Delete, ControllerLStick, ControllerRStick, LeftMouseButton, RightMouseButton, MiddleMouseButton, X1MouseButton, X2MouseButton, MouseScrollUp, MouseScrollDown, ControllerLStickUp, ControllerLStickDown, ControllerLStickLeft, ControllerLStickRight, ControllerRStickUp, ControllerRStickDown, ControllerRStickLeft, ControllerRStickRight, ControllerLUp, ControllerLDown, ControllerLLeft, ControllerLRight, ControllerRUp, ControllerRDown, ControllerRLeft, ControllerRRight, ControllerLBumper, ControllerRBumper, ControllerLOption, ControllerROption, ControllerLThumb, ControllerRThumb, ControllerLTrigger, ControllerRTrigger
+//	Note: some keys can have conflicts with your other keybindings.
+//	Note: I haven't tested the "controller" hotkeys.

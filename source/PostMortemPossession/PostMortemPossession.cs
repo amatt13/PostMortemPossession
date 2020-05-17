@@ -239,12 +239,25 @@ namespace PostMortemPossession
             if (pAgent != null)
             {
                 PrintInformation($"You are now controlling '{ pAgent.Name }'");
+                TransferFormationsControl(pAgent);
                 pAgent.Controller = Agent.ControllerType.Player;
-                this._player = pAgent;
+                _player = pAgent;
+                _player.SetMaximumSpeedLimit(10000000, false);
                 var battleObserverMissionLogic = _mission.GetMissionBehaviour<BattleObserverMissionLogic>();
                 if (battleObserverMissionLogic != null)
                     (battleObserverMissionLogic.BattleObserver as ScoreboardVM).IsMainCharacterDead = false;  // do not display the "you are dead" message at the bottom of the screen
             }
+        }
+
+        private void TransferFormationsControl(Agent pNewOwner)
+        {
+            if (_playerTeam is null || pNewOwner is null)
+                return;
+
+            if (_playerTeam.PlayerOrderController.Owner == _player)
+                _playerTeam.PlayerOrderController.Owner = pNewOwner;
+
+            _playerTeam.FormationsIncludingEmpty.Where(f => f != null && f.PlayerOwner == _player).ToList().ForEach(pf => pf.PlayerOwner = pNewOwner);
         }
 
         #region output
