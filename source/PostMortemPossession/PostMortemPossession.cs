@@ -19,6 +19,7 @@ namespace PostMortemPossession
         private const int NUMBER_OF_PRIORITY_GROUPS = 9;
 
         private bool _allowControlAllies { get; set; }
+        private bool _allowControlFormations { get; set; }
         private bool _muteExceptions { get; set; }
         private bool _verbose { get; set; }
         private InputKey _manualControlHotkey { get; set; }
@@ -47,6 +48,7 @@ namespace PostMortemPossession
 
                     // bools
                     this._allowControlAllies = (bool)jobject.Property("allowControlAllies").Value;
+                    this._allowControlFormations = (bool)jobject.Property("allowControlFormations").Value;
                     this._muteExceptions = (bool)jobject.Property("muteExceptions").Value;
                     this._verbose = (bool)jobject.Property("verbose").Value;
                     this._autoSelectRandomWithinPriority = (bool)jobject.Property("autoSelectRandomWithinPriority").Value;
@@ -239,7 +241,8 @@ namespace PostMortemPossession
             if (pAgent != null)
             {
                 PrintInformation($"You are now controlling '{ pAgent.Name }'");
-                TransferFormationsControl(pAgent);
+                if (_allowControlFormations)
+                    TakeControlOfPlayersFormations(pAgent);
                 pAgent.Controller = Agent.ControllerType.Player;
                 _player = pAgent;
                 _player.SetMaximumSpeedLimit(10000000, false);
@@ -249,7 +252,7 @@ namespace PostMortemPossession
             }
         }
 
-        private void TransferFormationsControl(Agent pNewOwner)
+        private void TakeControlOfPlayersFormations(Agent pNewOwner)
         {
             if (_playerTeam is null || pNewOwner is null)
                 return;
