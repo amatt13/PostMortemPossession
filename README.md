@@ -48,5 +48,3 @@ You can either compile the project yourself or go to [NEXUS MODS](https://www.ne
 
 ## Limitations
 Bandit hideouts are fucked. You won't be able to complete them if you take control of another character.
-
-You can't select the "retreat" option on the scoreboard if you chose to control an NPC, unless you die again.
