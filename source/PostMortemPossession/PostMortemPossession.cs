@@ -2,14 +2,12 @@
 using System.Linq;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using TaleWorlds.MountAndBlade;
 using TaleWorlds.Core;
 using TaleWorlds.InputSystem;
-using TaleWorlds.MountAndBlade.ViewModelCollection.HUD;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
+using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.Missions;
-using SandBox.GauntletUI.Missions;
+using TaleWorlds.MountAndBlade.ViewModelCollection;
 using System.Collections.Generic;
 
 namespace PostMortemPossession
@@ -47,33 +45,37 @@ namespace PostMortemPossession
                     var jobject = JObject.Parse(File.ReadAllText(optionsFile));
 
                     // bools
-                    this._allowControlAllies = (bool)jobject.Property("allowControlAllies").Value;
-                    this._allowControlFormations = (bool)jobject.Property("allowControlFormations").Value;
-                    this._muteExceptions = (bool)jobject.Property("muteExceptions").Value;
-                    this._verbose = (bool)jobject.Property("verbose").Value;
-                    this._autoSelectRandomWithinPriority = (bool)jobject.Property("autoSelectRandomWithinPriority").Value;
+                    _allowControlAllies = (bool)jobject.Property("allowControlAllies").Value;
+                    _allowControlFormations = (bool)jobject.Property("allowControlFormations").Value;
+                    _muteExceptions = (bool)jobject.Property("muteExceptions").Value;
+                    _verbose = (bool)jobject.Property("verbose").Value;
+                    _autoSelectRandomWithinPriority = (bool)jobject.Property("autoSelectRandomWithinPriority").Value;
 
                     // hotkeys
                     var manualControlHotkeyString = (string)jobject.Property("hotKey").Value;
                     if (!String.IsNullOrEmpty(manualControlHotkeyString))
                     {
                         if (Enum.TryParse(manualControlHotkeyString, out InputKey tempKey))
-                            this._manualControlHotkey = tempKey;
+                        {
+                            _manualControlHotkey = tempKey;
+                        }
                         else
                         {
                             _upstartErrors += $"Could not read 'hotKey'. Value '{ manualControlHotkeyString }'{ Environment.NewLine }Using default key 'O' instead" + Environment.NewLine;
-                            this._manualControlHotkey = InputKey.O;
+                            _manualControlHotkey = InputKey.O;
                         }
                     }
                     var autoSelectPriorityHotKeyString = (string)jobject.Property("autoSelectPriorityHotKey").Value;
                     if (!String.IsNullOrEmpty(autoSelectPriorityHotKeyString))
                     {
                         if (Enum.TryParse(autoSelectPriorityHotKeyString, out InputKey tempKey))
-                            this._autoControlHotkey = tempKey;
+                        {
+                            _autoControlHotkey = tempKey;
+                        }
                         else
                         {
                             _upstartErrors += $"Could not read 'autoSelectPriorityHotKey'. Value '{ autoSelectPriorityHotKeyString }'{ Environment.NewLine }Using default key 'U' instead" + Environment.NewLine;
-                            this._autoControlHotkey = InputKey.U;
+                            _autoControlHotkey = InputKey.U;
                         }
                     }
 
@@ -121,8 +123,8 @@ namespace PostMortemPossession
         public override void OnMissionBehaviourInitialize(Mission pMission)
         {
             base.OnMissionBehaviourInitialize(pMission);
-            this._mission = pMission;
-            this._player = null;
+            _mission = pMission;
+            _player = null;
             if (_autoSelectPriority != null)
                 _priorityHelper = new PriorityHelper(_autoSelectPriority, _autoSelectRandomWithinPriority);
         }
@@ -137,8 +139,8 @@ namespace PostMortemPossession
                 // Set player agent and team
                 if (Agent.Main != null && Agent.Main.Index != (_player?.Index).GetValueOrDefault(-1))
                 {
-                    this._player = Agent.Main;
-                    this._playerTeam = Agent.Main.Team;
+                    _player = Agent.Main;
+                    _playerTeam = Agent.Main.Team;
                 }
                 else if (_player != null && _player.Health <= 0.0 && _playerTeam != null)
                 {
@@ -147,9 +149,7 @@ namespace PostMortemPossession
                         ManualControl();
                     }
                     else if (Input.IsKeyPressed(_autoControlHotkey))
-                    {
                         AutomaticControl();
-                    }
                 }
             }
             catch (Exception e)
@@ -175,7 +175,9 @@ namespace PostMortemPossession
                     {
                         // attempt to take control of ally soldier
                         if (_allowControlAllies)
+                        {
                             TakeControlOfFriendlyAgent(lastFollowedAgent);
+                        }
                         else
                             PrintInformation($"You can't take control of ally '{ lastFollowedAgent.Name }'");
                     }
@@ -212,9 +214,7 @@ namespace PostMortemPossession
                             if (nextAgent == null)
                             {
                                 if (_allowControlAllies && alliedTeam != null)
-                                {
                                     nextAgent = alliedTeam.GetFormation((FormationClass)priorityUnitCategory).GetFirstUnit();
-                                }
                             }
                         }
                     }
@@ -246,9 +246,17 @@ namespace PostMortemPossession
                 pAgent.Controller = Agent.ControllerType.Player;
                 _player = pAgent;
                 _player.SetMaximumSpeedLimit(10000000, false);
+
+                // reset "FastForward" in case the player activated FastForward from the scoreboard
+                _mission.SetFastForwardingFromUI(false);
+
                 var battleObserverMissionLogic = _mission.GetMissionBehaviour<BattleObserverMissionLogic>();
-                if (battleObserverMissionLogic != null)
-                    (battleObserverMissionLogic.BattleObserver as ScoreboardVM).IsMainCharacterDead = false;  // do not display the "you are dead" message at the bottom of the screen
+                var scoreBoard = (battleObserverMissionLogic?.BattleObserver as ScoreboardVM);
+                if (scoreBoard != null)
+                {
+                    // do not display the "you are dead" message at the bottom of the screen
+                    scoreBoard.IsMainCharacterDead = false;  
+                }
             }
         }
 
