@@ -119,9 +119,9 @@ namespace PostMortemPossession
             }
         }
 
-        public override void OnMissionBehaviourInitialize(Mission pMission)
+        public override void OnMissionBehaviorInitialize(Mission pMission)
         {
-            base.OnMissionBehaviourInitialize(pMission);
+            base.OnMissionBehaviorInitialize(pMission);
             _mission = pMission;
             _player = null;
             if (_autoSelectPriority != null)
@@ -159,7 +159,7 @@ namespace PostMortemPossession
 
         protected void ManualControl()
         {
-            MissionView missionView = (MissionView)_mission?.MissionBehaviours.Where(mb => mb is MissionView && (mb as MissionView).MissionScreen?.LastFollowedAgent != null).FirstOrDefault();
+            MissionView missionView = (MissionView)_mission?.MissionBehaviors.Where(mb => mb is MissionView && (mb as MissionView).MissionScreen?.LastFollowedAgent != null).FirstOrDefault();
             if (missionView != null)
             {
                 var lastFollowedAgent = missionView.MissionScreen.LastFollowedAgent;
@@ -249,12 +249,11 @@ namespace PostMortemPossession
                 // reset "FastForward" in case the player activated FastForward from the scoreboard
                 _mission.SetFastForwardingFromUI(false);
 
-                var battleObserverMissionLogic = _mission.GetMissionBehaviour<BattleObserverMissionLogic>();
-                var scoreBoard = (battleObserverMissionLogic?.BattleObserver as ScoreboardVM);
-                if (scoreBoard != null)
+                var battleObserverMissionLogic = _mission.GetMissionBehavior<BattleObserverMissionLogic>();
+                if (battleObserverMissionLogic?.BattleObserver is ScoreboardVM scoreBoard)
                 {
                     // do not display the "you are dead" message at the bottom of the screen
-                    scoreBoard.IsMainCharacterDead = false;  
+                    scoreBoard.IsMainCharacterDead = false;
                 }
             }
         }

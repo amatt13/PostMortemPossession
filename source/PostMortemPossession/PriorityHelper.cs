@@ -45,9 +45,7 @@ namespace PostMortemPossession
         public List<UnitCategory> GetHigestPriorityOrder()
         {
             if (_random)
-            {
                 OrderPriority();
-            }
 
             return _higestPriorityOrder;
         }
@@ -69,9 +67,7 @@ namespace PostMortemPossession
                     }
                 }
                 else
-                {
                     newHigestPriorityOrder.AddRange(group.Select(x => x.Key));
-                }
             }
 
             _higestPriorityOrder = newHigestPriorityOrder;
