@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-using Newtonsoft.Json.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
+using TaleWorlds.MountAndBlade.View.MissionViews;
+using SandBox.ViewModelCollection;
+using Newtonsoft.Json.Linq;
 
 namespace PostMortemPossession
 {
@@ -54,13 +54,13 @@ namespace PostMortemPossession
                     var manualControlHotkeyString = (string)jobject.Property("hotKey").Value;
                     if (!String.IsNullOrEmpty(manualControlHotkeyString))
                     {
-                        if (Enum.TryParse(manualControlHotkeyString, out InputKey tempKey)) 
+                        if (Enum.TryParse(manualControlHotkeyString, out InputKey tempKey))
                         {
                             _manualControlHotkey = tempKey;
                         }
                         else
                         {
-                            _upstartErrors += $"Could not read 'hotKey'. Value '{ manualControlHotkeyString }'{ Environment.NewLine }Using default key 'O' instead" + Environment.NewLine;
+                            _upstartErrors += $"Could not read 'hotKey'. Value '{manualControlHotkeyString}'{Environment.NewLine}Using default key 'O' instead" + Environment.NewLine;
                             _manualControlHotkey = InputKey.O;
                         }
                     }
@@ -73,7 +73,7 @@ namespace PostMortemPossession
                         }
                         else
                         {
-                            _upstartErrors += $"Could not read 'autoSelectPriorityHotKey'. Value '{ autoSelectPriorityHotKeyString }'{ Environment.NewLine }Using default key 'U' instead" + Environment.NewLine;
+                            _upstartErrors += $"Could not read 'autoSelectPriorityHotKey'. Value '{autoSelectPriorityHotKeyString}'{Environment.NewLine}Using default key 'U' instead" + Environment.NewLine;
                             _autoControlHotkey = InputKey.U;
                         }
                     }
@@ -101,12 +101,12 @@ namespace PostMortemPossession
                 }
                 catch (Exception e)
                 {
-                    _upstartErrors += $"Unable to read content of options file: '{ e.Message }'" + Environment.NewLine;
+                    _upstartErrors += $"Unable to read content of options file: '{e.Message}'" + Environment.NewLine;
                 }
             }
             else
             {
-                _upstartErrors += $"PostMortemPossession: Unable to open (or find) options file: { optionsFile }" + Environment.NewLine;
+                _upstartErrors += $"PostMortemPossession: Unable to open (or find) options file: {optionsFile}" + Environment.NewLine;
             }
         }
 
@@ -153,7 +153,7 @@ namespace PostMortemPossession
             }
             catch (Exception e)
             {
-                PrintException($"PostMortemPossession: An exception was thrown: '{ e.Message }'");
+                PrintException($"PostMortemPossession: An exception was thrown: '{e.Message}'");
             }
         }
 
@@ -178,12 +178,12 @@ namespace PostMortemPossession
                             TakeControlOfFriendlyAgent(lastFollowedAgent);
                         }
                         else
-                            PrintInformation($"You can't take control of ally '{ lastFollowedAgent.Name }'");
+                            PrintInformation($"You can't take control of ally '{lastFollowedAgent.Name}'");
                     }
                     else if (lastFollowedAgent.Team.IsEnemyOf(_playerTeam))
                     {
                         // inform player that they can't take control of enemy soldiers
-                        PrintInformation($"You can't take control of enemy '{ lastFollowedAgent.Name }'");
+                        PrintInformation($"You can't take control of enemy '{lastFollowedAgent.Name}'");
                     }
                 }
             }
@@ -226,7 +226,7 @@ namespace PostMortemPossession
                     if (nextAgent != null)
                     {
                         TakeControlOfFriendlyAgent(nextAgent);
-                        PrintInformation($"Soldier found in group { priorityUnitCategory }");
+                        PrintInformation($"Soldier found in group {priorityUnitCategory}");
                         return;
                     }
                 }
@@ -239,7 +239,7 @@ namespace PostMortemPossession
         {
             if (pAgent != null)
             {
-                PrintInformation($"You are now controlling '{ pAgent.Name }'");
+                PrintInformation($"You are now controlling '{pAgent.Name}'");
                 if (_allowControlFormations)
                     TakeControlOfPlayersFormations(pAgent);
                 pAgent.Controller = Agent.ControllerType.Player;
@@ -250,7 +250,7 @@ namespace PostMortemPossession
                 _mission.SetFastForwardingFromUI(false);
 
                 var battleObserverMissionLogic = _mission.GetMissionBehavior<BattleObserverMissionLogic>();
-                if (battleObserverMissionLogic?.BattleObserver is ScoreboardVM scoreBoard)
+                if (battleObserverMissionLogic?.BattleObserver is SPScoreboardVM scoreBoard)
                 {
                     // do not display the "you are dead" message at the bottom of the screen
                     scoreBoard.IsMainCharacterDead = false;
@@ -275,21 +275,21 @@ namespace PostMortemPossession
         {
             var color = _messageColor != null ? _messageColor.Value : new Color(128, 128, 128);
             if (_verbose && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", color));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: {pMessage}", color));
         }
 
         protected void PrintError(string pMessage)
         {
             var color = _errorColor != null ? _errorColor.Value : new Color(128, 0, 0);
             if (_verbose && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", color));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: {pMessage}", color));
         }
 
         protected void PrintException(string pMessage)
         {
             var color = _errorColor != null ? _errorColor.Value : new Color(128, 0, 0);
             if (!_muteExceptions && !String.IsNullOrEmpty(pMessage))
-                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: { pMessage }", color));
+                InformationManager.DisplayMessage(new InformationMessage($"PostMortemPossession: {pMessage}", color));
         }
 
         #endregion
