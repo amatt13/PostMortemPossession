@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-using Newtonsoft.Json.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade.View.MissionViews;
+using TaleWorlds.MountAndBlade.ViewModelCollection.Scoreboard;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
+using Newtonsoft.Json.Linq;
 
 namespace PostMortemPossession
 {
@@ -148,7 +148,9 @@ namespace PostMortemPossession
                         ManualControl();
                     }
                     else if (Input.IsKeyPressed(_autoControlHotkey))
+                    {
                         AutomaticControl();
+                    }
                 }
             }
             catch (Exception e)
@@ -199,9 +201,11 @@ namespace PostMortemPossession
 
                 Agent nextAgent = null;
 
+                var playerFormationsWithUnits = _playerTeam.FormationsIncludingEmpty.Where(f => f.CountOfUnits > 0);
+
                 foreach (var priorityUnitCategory in priorities)
                 {
-                    if (_playerTeam.Formations.Count() > 0)
+                    if (playerFormationsWithUnits.Count() > 0)
                     {
                         if (priorityUnitCategory == PriorityHelper.UnitCategory.Companions)
                         {
@@ -250,10 +254,10 @@ namespace PostMortemPossession
                 _mission.SetFastForwardingFromUI(false);
 
                 var battleObserverMissionLogic = _mission.GetMissionBehavior<BattleObserverMissionLogic>();
-                if (battleObserverMissionLogic?.BattleObserver is ScoreboardVM scoreBoard)
+                if (battleObserverMissionLogic?.BattleObserver is ScoreboardBaseVM scoreboard)
                 {
                     // do not display the "you are dead" message at the bottom of the screen
-                    scoreBoard.IsMainCharacterDead = false;
+                    scoreboard.IsMainCharacterDead = false;
                 }
             }
         }
